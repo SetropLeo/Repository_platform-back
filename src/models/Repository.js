@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 
-const userSchema = new mongoose.Schema(
+const repositorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -20,3 +20,5 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+export default mongoose.model('Repository', repositorySchema)

@@ -5,13 +5,21 @@ class RepositoriesController {
   async index(req, res) {
     try {
       const { user_id } = req.params;
+      const { q } = req.query;
 
       const user = await User.findById(user_id);
 
       if (!user) return res.status(404).json();
 
-      const repositories = await Repository.find({ 
-        userId: user_id 
+      let query = {};
+
+      if (q) {
+        query = { url: { $regex: q } };
+      }
+
+      const repositories = await Repository.find({
+        userId: user_id,
+        ...query,
       });
 
       return res.json(repositories);
@@ -68,7 +76,6 @@ class RepositoriesController {
       await repository.deleteOne();
 
       return res.status(200).json();
-
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error.' });
